@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QCalendarWidget
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
@@ -15,7 +15,7 @@ class Ui_Form(object):
         
         
         self.label = QtWidgets.QLabel(Form)
-        self.label.setGeometry(QtCore.QRect(25, 60, 485, 50))
+        self.label.setGeometry(QtCore.QRect(25, 60, 550, 50))
         self.label.setStyleSheet("color:red; font-size:20px")
         self.label.setText("Uvoz podataka\n____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________")
         
@@ -35,6 +35,31 @@ class Ui_Form(object):
         self.pushButton2.setGeometry(QtCore.QRect(365, 120, 150, 50))
         self.pushButton2.setObjectName("pushButton2")
         
+        # drugi deo aplikacije
+        self.label2 = QtWidgets.QLabel(Form)
+        self.label2.setGeometry(QtCore.QRect(25, 195, 550, 50))
+        self.label2.setStyleSheet("color:red; font-size:20px")
+        self.label2.setText("Trening Podataka\n____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________")
+
+        # kalendar
+        self.kalendar = QtWidgets.QCalendarWidget(Form)
+        self.kalendar.setGeometry(25, 265, 350, 250)
+        
+        # labela koja ispisuje datum koji ste izabrali
+        self.label2 = QtWidgets.QLabel(Form)
+        self.label2.setGeometry(QtCore.QRect(25, 500, 350, 50))
+        self.label2.setVisible(False)
+        
+        # text box za prikaz trening podataka
+        self.textBox2 = QtWidgets.QTextBrowser(Form)
+        self.textBox2.setGeometry(QtCore.QRect(400, 265, 160, 50))
+        self.textBox2.setObjectName("textBox2")
+        
+        # dugme da pokrene trening podataka 
+        self.pushButton3 = QtWidgets.QPushButton(Form)
+        self.pushButton3.setGeometry(QtCore.QRect(400, 360, 160, 50))
+        self.pushButton3.setObjectName("pushButton3")
+        
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         
@@ -48,6 +73,9 @@ class Ui_Form(object):
         self.pushButton2.setText(_translate("Form", "Upisi podatke u bazu"))
         self.pushButton2.clicked.connect(self.pushButton_handler2)
         
+        self.pushButton3.setText(_translate("Form", "Pokreni trening podataka"))
+        self.pushButton3.clicked.connect(self.pushButton_handler3)
+        
     def pushButton_handler1(self):
         print("Dugme za odabir .xlsx podataka pritisnut")
         try:
@@ -57,7 +85,12 @@ class Ui_Form(object):
             
     def pushButton_handler2(self):
         print("Dugme za upis podataka u bazu pritisnut")
-
+        
+    def pushButton_handler3(self):
+        print("Dugme za pokretanje treninga pritisnuto")
+        value = self.kalendar.selectedDate()        
+        self.label2.setText("Selected Date: " + str(value).split('.')[2])
+        self.label2.setVisible(True)
 
     def open_dialog_box1(self):
         print("Otvaram .xlsx fajl ...")
