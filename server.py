@@ -1,4 +1,6 @@
 import socket
+import sqlite3
+import db_setupUp
 
 s = socket.socket()
 print("Socket succesfully created")
@@ -13,4 +15,5 @@ while True :
     print('Got connection from', addr)
     message = ('Thank you for connecting')
     c.send(message.encode())
+    
     c.close()
