@@ -99,5 +99,5 @@ def prodji_kroz_godinu(podaci):
 
 
 if __name__ == '__main__':
-    list_years = ['2018','2019','2020','2021']
-    prodji_kroz_godine(list_years)
+    lista_godina = ['2018','2019','2020','2021']
+    prodji_kroz_godine(lista_godina)
