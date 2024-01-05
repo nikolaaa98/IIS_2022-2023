@@ -58,7 +58,7 @@ def cover_loads_for_explicit_year(podaci, putanja, godina):
     return  pd.concat(lista)
 
 
-#funckija koja parsira vreme da se vide minuti i sekunde
+#funckija koja parsira vreme i kolona Name
 def function_to_better_cover(data_frame1):
     data1 = data_frame1[data_frame1['Name'] == 'N.Y.C.']
     m = (data1['Time Stamp'].dt.minute == 0) & (data1['Time Stamp'].dt.second == 0)
@@ -70,14 +70,14 @@ def prodji_kroz_godine(godine):
 
     for godina in godine:
         #ucitaj excel koji je za neku godinu (2018, 2019, 2020, 2021)
-        putanja = '../Training Data/NYS Weather Data/New York City, NY/New York City, ... {}-01-01 to {}-12-31.csv'.format(godina,godina)
+        putanja = 'C:/Users/User/Desktop/InteligentniSiste/IIS_2022-2023/Training Data/NYS Weather Data/New York City, NY/New York City, ... {}-01-01 to {}-12-31.csv'.format(godina,godina)
         podaci = pd.read_csv(putanja)
         kolona = podaci[ # izvuci iz excela samo kolone koje su mi bitne
             ['datetime', 'temp', 'feelslike', 'humidity', 'windgust', 'windspeed','winddir', 'sealevelpressure', 'cloudcover', 'visibility',
              'conditions']]
         kolona = preuzmi_podatke(kolona)
         kolona = kolona.rename(columns={'datetime' : 'Time Stamp'}) # mora da se promeni ime, zato se u drugom excelu zove Time Stamp
-        putanjaNVSLoadData = '../Training Data/NYS Load  Data'
+        putanjaNVSLoadData = 'C:/Users/User/Desktop/InteligentniSiste/IIS_2022-2023/Training Data/NYS Load  Data'
         kolona['Time Stamp'] = pd.to_datetime(kolona['Time Stamp'], format='%Y-%m-%dT%H:%M:%S') #transformisi datum u format koji nam odgovara
 
         result_for_year = cover_loads_for_explicit_year(kolona,putanjaNVSLoadData,godina)
