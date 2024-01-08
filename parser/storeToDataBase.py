@@ -13,15 +13,15 @@ def return_data_frame(path: str) -> pd.DataFrame:
 def oduzmi_praznike_iz_dataseta(data_frame):
 
     holiday_frame = pd.read_excel('C:/Users/User/Desktop/InteligentniSiste/IIS_2022-2023/Training Data/US Holidays 2018-2021.xlsx')
-    data_frame['Date'] = pd.to_datetime(data_frame['Time Stamp'] ,format='%Y-%m-%d').dt.date
-    holiday_frame['Date'] = pd.to_datetime(holiday_frame['Unnamed: 2']).dt.date
-    data_frame = data_frame[~(data_frame['Date'].isin(holiday_frame['Date']))]
+    data_frame['Time Stamp'] = pd.to_datetime(data_frame['Time Stamp'] ,format='%Y-%m-%d').dt.date
+    holiday_frame['Time Stamp'] = pd.to_datetime(holiday_frame['Unnamed: 2']).dt.date
+    data_frame = data_frame[~(data_frame['Time Stamp'].isin(holiday_frame['Time Stamp']))]
     return data_frame
 
 #funkcija koja vraca da li je radni dan radan ili neradan (vikend)
 def radni_dan(frame , year):
     help = frame
-    help = help.groupby('Date').mean()
+    #help = help.groupby('Time Stamp').mean()
     help = help.drop([ 'temp', 'humidity', 'feelslike', 'windgust','winddir', 'windspeed', 'sealevelpressure',
                       'cloudcover', 'visibility','Unnamed: 0', 'PTID', 'Load'], axis =1)
     help['day'] = 0
@@ -35,7 +35,7 @@ def radni_dan(frame , year):
         week_days = 2
     if year == '2021':
         week_days = 2
-
+    
     for index in range(len(help)):
         day = 1
         if week_days % 6 == 0:
@@ -44,14 +44,18 @@ def radni_dan(frame , year):
             week_days = 0
             day = 0
 
-        help['day'][index] = day
-        help['day_week'][index] = week_days
-        help['day_sin'][index] = sin(2 * pi * week_days / 7)
-        help['day_cos'][index] = cos(2 * pi * week_days / 7) # svaki dan se ponavlja u mesecu pa koristimo sin/cos
+        #help['day'][index] = day
+        help.loc[index, 'day'] = day
+        help.loc[index, 'day_week'] = week_days
+        #help['day_week'][index] = week_daysi
+        #help.loc[index, 'day_sin'] = round(sin(2 * pi * week_days / 7), 2)
+        #help.loc[index, 'day_cos'] = round(cos(2 * pi * week_days / 7), 2)
+        #help['day_sin'][index] = sin(2 * pi * week_days / 7)
+        #help['day_cos'][index] = cos(2 * pi * week_days / 7) # svaki dan se ponavlja u mesecu pa koristimo sin/cos
 
-        week_days += 1
-
-    frame = pd.merge(frame , help , on='Date')
+        #week_days += 1
+    
+    frame = pd.merge(frame , help , on='Time Stamp')
     return frame
 
 #dodajemo sin/cos satima i mesecima da bi program razumeo da se ponavaljaju 
@@ -145,13 +149,13 @@ def ucitaj_u_bazu_podataka(data_frame):
             row_dict['day_part'] = 0
 
         #year part :D
-        if row['Date'].month in winter_months:
+        if row['Time Stamp'].month in winter_months:
             row_dict['year_part'] = 0
-        if row['Date'].month in spring_months:
+        if row['Time Stamp'].month in spring_months:
             row_dict['year_part'] = 0.25
-        if row['Date'].month in summer_months:
+        if row['Time Stamp'].month in summer_months:
             row_dict['year_part'] = 0.5
-        if row['Date'].month in autumn_months:
+        if row['Time Stamp'].month in autumn_months:
             row_dict['year_part'] = 1
 
         #temperature offset
@@ -181,14 +185,16 @@ if __name__ == '__main__':
     for item in lista_godina:
         data = return_data_frame('C:/Users/User/Desktop/InteligentniSiste/IIS_2022-2023/packed_data_{}.csv'.format(item))
         # procitaj podatke u nekom vremenskom opsegu
-        #data['Date'] = pd.to_datetime(data['Time Stamp'], format='%Y-%m-%d').dt.date
+        #data['Time Stamp'] = pd.to_datetime(data['Time Stamp'], format='%Y-%m-%dT%H:%M:%S').dt.date
+        data['Time Stamp'] = pd.to_datetime(data['Time Stamp'], format='%Y-%m-%d %H:%M:%S').dt.date
+
         
         #uzmi u obzir podatke kada su praznici, dani koji nisu radni itd...
         data = radni_dan(data, item)
         frame = oduzmi_praznike_iz_dataseta(data)
 
-        frame = add_sin_cos(frame)
-        frame = yesterday_temp(frame)
+        #frame = add_sin_cos(frame)
+        #frame = yesterday_temp(frame)
         
         data = upisi_data_dataset(frame)
-        ucitaj_u_bazu_podataka(frame)
+        #ucitaj_u_bazu_podataka(frame)
