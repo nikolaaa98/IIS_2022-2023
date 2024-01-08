@@ -1,16 +1,19 @@
 import datetime
+import sys
 import csv
 import time
 import pandas as pd
-from parser.modelWeather import return_elements_from_database_in_range,return_elements_from_database_in_range_predict
-from backend.weather_model_backend import return_all_elements
-from parser.storeToDataBase import load_dataframe_to_database
-from parser.parser import prodji_kroz_godinu
+
+sys.path.append('C:/Users/User/Desktop/InteligentniSiste/IIS_2022-2023/parser/modelWeather')
+from modelWeather import return_elements_from_database_in_range,return_elements_from_database_in_range_predict
+from weather_model_backend import *
+from storeToDataBase import *
+from parser import *
 from datetime import date, timedelta
-from neural_network.custom_preparer import CustomPreparer
-from neural_network.ann_regression import AnnRegression
-from neural_network.custom_ploting import CustomPloting
-from neural_network.scorer import Scorer
+from custom_preparer import CustomPreparer
+from ann_regression import AnnRegression
+from custom_ploting import CustomPloting
+from scorer import Scorer
 
 NUMBER_OF_COLUMNS = 24
 NUMBER_OF_COLUMNS1 = 25
