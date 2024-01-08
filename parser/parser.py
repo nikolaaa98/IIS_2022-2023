@@ -57,13 +57,11 @@ def cover_loads_for_explicit_year(podaci, putanja, godina):
 
     return  pd.concat(lista)
 
-
 #funckija koja parsira vreme i kolona Name
 def function_to_better_cover(data_frame1):
     data1 = data_frame1[data_frame1['Name'] == 'N.Y.C.']
     m = (data1['Time Stamp'].dt.minute == 0) & (data1['Time Stamp'].dt.second == 0)
     return data1[m]
-
 
 #funckija koja ucita excel za sve godine (2018, 2019, 2020, 2021)
 def prodji_kroz_godine(godine):
@@ -83,7 +81,6 @@ def prodji_kroz_godine(godine):
         result_for_year = cover_loads_for_explicit_year(kolona,putanjaNVSLoadData,godina)
         result_for_year.to_csv('packed_data_{}.csv'.format(godina))
 
-
 #funckija koja prolazi kroz svaku godinu posebno (kroz svaki excel)
 def prodji_kroz_godinu(podaci):
 
@@ -96,7 +93,6 @@ def prodji_kroz_godinu(podaci):
         kolona['Time Stamp'] = pd.to_datetime(kolona['Time Stamp'], format='%Y-%m-%dT%H:%M:%S')
         
         return kolona
-
 
 if __name__ == '__main__':
     lista_godina = ['2018','2019','2020','2021']

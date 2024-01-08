@@ -5,7 +5,7 @@ import pandas as pd
 from parser.modelWeather import return_elements_from_database_in_range,return_elements_from_database_in_range_predict
 from backend.weather_model_backend import return_all_elements
 from parser.storeToDataBase import load_dataframe_to_database
-from parser.parser import loop_through_year
+from parser.parser import prodji_kroz_godinu
 from datetime import date, timedelta
 from neural_network.custom_preparer import CustomPreparer
 from neural_network.ann_regression import AnnRegression
@@ -21,7 +21,7 @@ class Repo_example:
     @classmethod
     def upload_file_and_store(cls,file):
         data_frame = pd.read_csv(file)
-        data_frame = loop_through_year(data_frame)
+        data_frame = prodji_kroz_godinu(data_frame)
         data = load_dataframe_to_database(data_frame)
 
         return True
